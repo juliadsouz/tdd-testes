@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach } from 'vitest';
-import {removeTask, resetId, addTask } from '../src/taskManager.js';
+import {removeTask, resetId, addTask, filterTask } from '../src/taskManager.js';
 
 
 describe('removeTask', () => {
@@ -10,8 +10,10 @@ describe('removeTask', () => {
     tasks = addTask([], 'Tarefa 1');
     tasks = addTask(tasks, 'Tarefa 2');
     tasks = addTask(tasks, 'Tarefa 3');
+
   });
 
+ 
   test('deve remover uma tarefa pelo ID', () => {
    const updated = removeTask(tasks, 2);
 
@@ -41,7 +43,39 @@ describe('removeTask', () => {
 
   test('Lista vazia retorna array vazio', () => {
     expect(removeTask([], 1)).toHaveLength(0);
- 
+});
 
 });
+
+describe('filterTask', () => {
+  let tasks;
+
+  beforeEach(() => {
+    resetId();
+    tasks = addTask([], 'Tarefa 1');
+    tasks = addTask(tasks, 'Tarefa 2');
+    tasks = addTask(tasks, 'Tarefa 3');
+
+    tasks = tasks.map((t) => (t.id === 2 ? { ...t, completed: !t.completed } : t));
+  });
+
+  test('deve retornar todas as tarefas com o filtro "all"', () => {
+    const result = filterTask(tasks, 'all');
+  expect(result).toHaveLength(3);
 });
+  test('deve retornar apenas pendentes com filtro "pending"', () => {
+    const result = filterTask(tasks, 'pending');
+
+    expect(result).toHaveLength(2);
+    result.forEach((t) => expect(t.completed).toBe(false));
+  });
+
+  test('deve retornar apenas concluídas com filtro "completed"', () => {
+    const result = filterTask(tasks, 'completed');
+
+    expect(result).toHaveLength(1);
+    expect(result[0].title).toBe('Tarefa 2');
+    expect(result[0].completed).toBe(true);
+  });
+}
+)

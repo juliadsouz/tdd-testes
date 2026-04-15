@@ -11,7 +11,8 @@ import {
   createTask,
   validatePriority,
   filterByPriority,
-  isDuplicate} from '../src/taskManager.js';
+  isDuplicate,
+  searchTasks} from '../src/taskManager.js';
 
   describe('toggleTask', () => {
     beforeEach(() => {
@@ -256,14 +257,65 @@ describe('isDuplicated', () => {
   expect(isDuplicate(tasks, 'estudar')).toBe(true);
 });
 
-test('deve retornar false para título diferente', () => {
+  test('deve retornar false para título diferente', () => {
   const tasks = [{ title: 'Estudar' }];
   expect(isDuplicate(tasks, 'Trabalhar')).toBe(false);
 });
 
-test('deve retornar erro quando existir título igual', () => {
+  test('deve retornar erro quando existir título igual', () => {
   const tasks = [{title: 'Estudar'}];
   expect(() => addTask(tasks, 'Estudar')).toThrow('Tarefa duplicada')
 
 })
   })
+
+  describe('sortTasks', () => {
+
+    test('deve encontrar tarefas que contêm o texto', () => {
+      const tasks = [
+        { title: 'Estudar' },
+        { title: 'Testar' },
+        { title: 'Trabalhar' }
+      ];
+    
+      const result = searchTasks(tasks, 'est');
+    
+      expect(result).toHaveLength(2);
+    });
+  
+    test('deve funcionar case-insensitive', () => {
+      const tasks = [
+        { title: 'Estudar' },
+        { title: 'Testar' }
+      ];
+    
+      const result = searchTasks(tasks, 'EST');
+    
+      expect(result).toHaveLength(2);
+    });
+  
+    test('deve retornar vazio quando não encontra', () => {
+      const tasks = [{ title: 'Estudar' }];
+    
+      const result = searchTasks(tasks, 'xyz');
+    
+      expect(result).toEqual([]);
+    });
+  
+    test('deve retornar vazio com lista vazia', () => {
+      const result = searchTasks([], 'algo');
+    
+      expect(result).toEqual([]);
+    });
+
+    test('deve retornar todas as tarefas quando query vazia', () => {
+      const tasks = [
+        { title: 'Estudar' },
+        { title: 'Testar' }
+      ];
+    
+      const result = searchTasks(tasks, '');
+    
+      expect(result).toHaveLength(2);
+    });
+    })

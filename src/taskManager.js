@@ -18,6 +18,10 @@ export function toggleTask(task) {
 export function addTask(tasks, title) {
   const newTask = createTask(title);
 
+  if (isDuplicate(tasks, title)) {
+    throw new Error('Tarefa duplicada');
+  }
+
   return [...tasks, newTask];
 }
 
@@ -73,4 +77,11 @@ export function filterByPriority(tasks, priority) {
 
 export function validatePriority(priority) {
     return ['low', 'medium', 'high'].includes(priority);
-  }
+}
+
+//Exercício 6 - Tarefas Duplicadas
+
+export function isDuplicate(tasks, title) {
+  const normalized = title.trim().toLowerCase();
+  return tasks.some(t => t.title.toLowerCase() === normalized);
+}

@@ -6,7 +6,10 @@ import {
   filterTask,
   countTasks,
   countPending,
-  countCompleted } from '../src/taskManager.js';
+  countCompleted, 
+  createTask,
+  validatePriority,
+  filterByPriority} from '../src/taskManager.js';
 
 
 describe('removeTask', () => {
@@ -155,4 +158,52 @@ describe('countPending', () => {
   });
   });
   
+describe('createTask', () => {
 
+   test('deve retornar objeto com priority: high', () => {
+    const task = createTask('Estudar', 'high');
+
+    expect(task.priority).toBe('high');
+  });
+
+  test('deve usar medium quando priority não for informada', () => {
+  const task = createTask('Tarefa');
+
+  expect(task.priority).toBe('medium');
+});
+})
+
+describe('validatepriority', () => {
+
+   test('deve retornar true para objeto com priority: high', () => {
+    const task = createTask('Estudar', 'high');
+
+    expect(validatePriority(task.priority)).toBe(true);
+  });
+
+  test('deve retornar false para prioridade inválida', () => {
+  const task = createTask('Tarefa');
+  task.priority = 'urgente'
+
+  expect(validatePriority(task.priority)).toBe(false);
+});
+})
+
+describe('filterByPriority', () => {
+  let tasks;
+
+  beforeEach(() => {
+
+ resetId();
+    tasks = addTask([], 'Tarefa 1');
+    tasks = addTask(tasks, 'Tarefa 2');
+    tasks = addTask(tasks, 'Tarefa 3');
+    tasks = tasks.map((t) => (t.id === 1 ? { ...t, priority: 'high'} : t));
+  });
+
+   test('deve retornar apenas tarefas de alta prioridade', () => {
+    expect(filterByPriority(tasks,'high')).toHaveLength(1);
+  });
+
+  
+})

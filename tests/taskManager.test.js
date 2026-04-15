@@ -1,5 +1,6 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import {
+  toggleTask,
   removeTask,
   resetId,
   addTask,
@@ -11,6 +12,42 @@ import {
   validatePriority,
   filterByPriority} from '../src/taskManager.js';
 
+  describe('toggleTask', () => {
+    beforeEach(() => {
+      resetId();
+    });
+  
+    test('deve marcar uma tarefa pendente como concluída', () => {
+      const task = createTask('Tarefa pendente');
+      const toggled = toggleTask(task);
+  
+      expect(toggled.completed).toBe(true);
+    });
+  
+    test('deve desmarcar uma tarefa concluída', () => {
+      const task = createTask('Tarefa pendente');
+      const completed = toggleTask(task);
+      const uncompleted = toggleTask(completed);
+  
+      expect(uncompleted.completed).toBe(false);
+    });
+  
+    test('deve manter o id e o título inalterados', () => {
+      const task = createTask('Minha tarefa');
+      const toggled = toggleTask(task);
+  
+      expect(toggled.id).toBe(task.id);
+      expect(toggled.title).toBe(task.title);
+    });
+  
+    test('deve retornar um novo objeto (imutabilidade)', () => {
+      const task = createTask('Tarefa original');
+      const toggled = toggleTask(task);
+  
+      expect(toggled).not.toBe(task);
+      expect(task.completed).toBe(false);
+    });
+  });
 
 describe('removeTask', () => {
  let tasks;

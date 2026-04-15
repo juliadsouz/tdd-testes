@@ -85,3 +85,16 @@ export function isDuplicate(tasks, title) {
   const normalized = title.trim().toLowerCase();
   return tasks.some(t => t.title.toLowerCase() === normalized);
 }
+
+//Exercício 7 - sortTasks
+
+export function sortTasks(tasks) {
+  return [...tasks].sort((a, b) => Number(a.completed) - Number(b.completed));
+}
+
+//Exercício 8 - searchTasks
+
+export function searchTasks(tasks, query) {
+  const q = query.toLowerCase();
+  return tasks.filter(t => t.title.toLowerCase().includes(q));
+}

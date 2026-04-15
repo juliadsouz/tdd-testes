@@ -10,7 +10,8 @@ import {
   countCompleted, 
   createTask,
   validatePriority,
-  filterByPriority} from '../src/taskManager.js';
+  filterByPriority,
+  isDuplicate} from '../src/taskManager.js';
 
   describe('toggleTask', () => {
     beforeEach(() => {
@@ -240,7 +241,29 @@ describe('filterByPriority', () => {
 
    test('deve retornar apenas tarefas de alta prioridade', () => {
     expect(filterByPriority(tasks,'high')).toHaveLength(1);
+  });  
+})
+
+describe('isDuplicated', () => {
+
+  test('deve retornar true para título igual', () => {
+    const tasks = [{ title: 'Estudar' }];
+    expect(isDuplicate(tasks, 'Estudar')).toBe(true);
   });
 
-  
+  test('deve retornar true para título igual ignorando maiuscula/minuscula', () => {
+    const tasks = [{ title: 'Estudar' }];
+  expect(isDuplicate(tasks, 'estudar')).toBe(true);
+});
+
+test('deve retornar false para título diferente', () => {
+  const tasks = [{ title: 'Estudar' }];
+  expect(isDuplicate(tasks, 'Trabalhar')).toBe(false);
+});
+
+test('deve retornar erro quando existir título igual', () => {
+  const tasks = [{title: 'Estudar'}];
+  expect(() => addTask(tasks, 'Estudar')).toThrow('Tarefa duplicada')
+
 })
+  })

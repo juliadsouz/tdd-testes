@@ -3,7 +3,17 @@ let _nextId = 1;
 export function resetId() {
   _nextId = 1;
 }
-//Exercício 1 - RemoveTask
+
+//Exercício 1 - ToggleTask
+
+export function toggleTask(task) {
+  return {
+    ...task,
+    completed: !task.completed,
+  };
+}
+
+//Exercício 2 - RemoveTask
 
 export function addTask(tasks, title) {
   const newTask = createTask(title);
@@ -14,7 +24,7 @@ export function addTask(tasks, title) {
 export function removeTask(tasks, taskId) {
   return tasks.filter((task) => task.id !== taskId); }
 
-//Exercício 2 - FilterTask
+//Exercício 3 - FilterTask
 
 export function filterTask(tasks,status) {
   switch(status) {
@@ -28,7 +38,7 @@ export function filterTask(tasks,status) {
   }
 }
 
-//Exercício 3 - Contagens
+//Exercício 4 - Contagens
 
 export function countTasks(tasks) {
  return tasks.length;
@@ -42,7 +52,7 @@ export function countPending(tasks) {
   return tasks.filter((task) => task.completed === false).length;
 }
 
-//Exercício 4 - Priority, ValidatePriority, filterByPriority
+//Exercício 5 - Priority, ValidatePriority, filterByPriority
 
 export function createTask(title, priority) {
   if (!['low', 'medium', 'high'].includes(priority)) {
